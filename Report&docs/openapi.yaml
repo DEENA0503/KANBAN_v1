@@ -1,0 +1,788 @@
+openapi: 3.0.0
+info:
+  title: KANBAN API
+  version: 1.0.0
+  description: |
+    <h3> Users Table Schema </h3> 
+    <table>
+      <thead>
+        <th>Column Name</th>
+        <th>Column Type</th>
+        <th>Constraints</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>id_</td>
+        <td>Integer</td>
+        <td>Primary Key, Auto Increment</td>
+      </tr>
+      <tr>
+        <td>name</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>email</td>
+        <td>String</td>
+        <td>Unique, Not Null</td>
+      </tr>      
+      <tr>
+        <td>passw</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>         
+    </tbody>
+    </table>
+
+    <h3> List Table Schema</h3>
+    <table>
+      <thead>
+        <th>Column Name</th>
+        <th>Column Type</th>
+        <th>Constraints</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>l_id</td>
+        <td>Integer</td>
+        <td>Primary Key, Auto Increment</td>
+      </tr>
+      <tr>
+        <td>user_id</td>
+        <td>Integer</td>
+        <td>Foreign Key ( users.id_), Not Null</td>
+      </tr>
+      <tr>
+        <td>l_name</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>      
+      <tr>
+        <td>dsp</td>
+        <td>String</td>
+        <td></td>
+      </tr>         
+    </tbody>
+    </table>
+
+
+    <h3> Card Table Schema </h3> 
+    <table>
+      <thead>
+        <th>Column Name</th>
+        <th>Column Type</th>
+        <th>Constraints</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>c_id</td>
+        <td>Integer</td>
+        <td>Primary Key, Auto Increment</td>
+      </tr>
+      <tr>
+        <td>c_name</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>cont</td>
+        <td>String</td>
+        <td></td>
+      </tr>  
+      <tr>
+        <td>comp</td>
+        <td>String</td>
+        <td></td>
+      </tr> 
+      <tr>
+        <td>deadline</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>      
+      <tr>
+        <td>list_id</td>
+        <td>Integer</td>
+        <td>Foreign Key (list.l_id), Not Null</td>
+    </tbody>
+    </table>
+
+    <h3> Error Codes </h3> 
+    <table>
+      <thead>
+        <th>Resource</th>
+        <th>Error Code</th>
+        <th>Message</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>Userapi</td>
+        <td>U01</td>
+        <td>Invalid User name</td>
+      </tr>
+      <tr>
+        <td>Userapi</td>
+        <td>U02</td>
+        <td>email id is required</td>
+      </tr>
+      <tr>
+        <td>Userapi</td>
+        <td>U03</td>
+        <td>Password required</td>
+      </tr>
+      <tr>
+        <td>Userapi</td>
+        <td>U04</td>
+        <td>Invalid email</td>
+      </tr>
+      <tr>
+        <td>Userapi</td>
+        <td>U05</td>
+        <td>Invalid password, minimum 6 character password required.</td>
+      </tr>
+      <tr>
+        <td>Userapi</td>
+        <td>E01</td>
+        <td>email id is not unique</td>
+      </tr>
+      <tr>
+        <td>Listapi</td>
+        <td>U013</td>
+        <td>Invalid List name.</td>
+      </tr>
+      <tr>
+        <td>Listapi</td>
+        <td>U014</td>
+        <td>Invalid description.</td>
+      </tr>
+      <tr>
+        <td>Cardapi</td>
+        <td>U08</td>
+        <td>Invalid Card name.</td>
+      </tr>  
+      <tr>
+        <td>Listapi</td>
+        <td>U015</td>
+        <td>Invalid content.</td>
+      </tr>
+      <tr>
+        <td>Cardapi</td>
+        <td>U018</td>
+        <td>either put 'comp' or null as values.</td>
+      </tr> 
+      <tr>
+        <td>Cardapi</td>
+        <td>U019</td>
+        <td>Invalid date format.</td>
+      </tr>   
+      <tr>
+        <td>Cardapi</td>
+        <td>U09</td>
+        <td>Invalid date.</td>
+      </tr>   
+      <tr>
+        <td>Cardapi</td>
+        <td>U010</td>
+        <td>Invalid month values.</td>
+      </tr>           
+    </tbody>
+    </table>
+servers:
+  - url: http://127.0.0.1:8080/
+paths:
+  /api/user/{name}/{email}/{password}:
+    description: >-
+      End point to fetch user details.
+    get:
+      description: Operation to get user details.
+      parameters:
+        - in: path
+          name: name
+          required: true
+          schema:
+            type: string
+            example: user name
+        - in: path
+          name: email
+          required: true
+          schema:
+            type: string
+            example: user@gmail.com
+        - in: path
+          name: password
+          required: true
+          schema:
+            type: string
+            example: 6 character password            
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                title: user details
+                type: object
+                properties:
+                      user_id:
+                        type: integer
+                        example: 15
+                      user_name:
+                        type: string
+                        example: user
+                      email:
+                        type: string
+                        example: user@gmail.com
+        '404':
+          description: User not found.
+          
+        '500':
+          description: Internal Server Error.
+        '400':
+          description: Bad request 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+                    
+  /api/user:
+    description: >-
+      End point to to add user.
+    post:
+      description: Operation to create new user.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_name:
+                  type: string
+                  example: user
+                email:
+                  type: string
+                  example: user@gmail.com
+                password:
+                  type: string
+                  example: user12
+      responses:
+        '201':
+          description: Successfully Created
+          content:
+            application/json:
+              schema:
+                title: user object
+                type: object
+                properties:
+                  user_id:
+                    type: integer
+                    example: 12
+                  user_name:
+                    type: string
+                    example: user
+                  email:
+                    type: string
+                    example: user@gmail.com
+        '409':
+          description: Email id is not unique.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string       
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+  /api/user/{u_id}/lists:
+    description: >-
+      End point to fetch all lists for a user.
+    get:
+      description: Operation to get a user lists
+      parameters:
+        - in: path
+          name: u_id
+          required: true
+          schema:
+            type: integer
+            example: 8       
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                title: user details
+                type: array
+                items:
+                  properties:
+                      list_id:
+                        type: integer
+                        example: 15
+                      user_id:
+                        type: integer
+                        example: 8
+                      list_name:
+                        type: string
+                        example: list
+                      list_description:
+                        type: string
+                        example: description
+        '404':
+          description: User/lists not found.
+        '500':
+          description: Internal Server Error.
+        
+    post:
+      description: Operation to add a list to a user
+      parameters:
+        - in: path
+          name: u_id
+          required: true
+          schema:
+            type: integer
+            example: 8
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                l_name:
+                  type: string
+                  example: list_name
+                dsp:
+                  type: string
+                  example: description        
+      responses:
+        '201':
+          description: Successfully created a list
+          content:
+            application/json:
+              schema:
+                title: user details
+                type: array
+                items:
+                  properties:
+                      list_id:
+                        type: integer
+                        example: 15
+                      user_id:
+                        type: integer
+                        example: 8
+                      list_name:
+                        type: string
+                        example: list
+                      list_description:
+                        type: string
+                        example: description
+        '404':
+          description: User not found.
+        '500':
+          description: Internal Server Error.
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string  
+                    
+  /api/user/{u_id}/list/{l_id}:
+    description: URL to delete a list for the user.
+    delete:
+      description: URL to delete a list for the user.
+      parameters:
+        - in: path
+          name: u_id
+          required: true
+          schema:
+            type: integer
+            example: 101
+        - in: path
+          name: l_id
+          required: true
+          schema:
+            type: integer
+            example: 10
+      responses:
+        '200':
+          description: Successfully deleted.
+        '404':
+          description: Invalid User Id or List Id.
+        '500':
+          description: Internal Server Error            
+    put:
+      description: Operation to update the list
+      parameters:
+        - in: path
+          name: u_id
+          required: true
+          schema:
+            type: integer
+            example: 101
+        - in: path
+          name: l_id
+          required: true
+          schema:
+            type: integer
+            example: 10    
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                l_name:
+                  type: string
+                  example: list name
+                dsp:
+                  type: string
+                  example: dsecription
+      responses:
+        '200':
+          description: Successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  l_id:
+                    type: integer
+                    example: 101
+                  user_id:
+                    type: integer
+                    example: 5
+                  list_name:
+                    type: string
+                    example: list name
+                  description:
+                    type: string
+                    example: description
+        '404':
+          description: user/list not found
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string  
+          
+  /api/user/{user_id}/list/{list_id}/cards:
+    description: >-
+      End point to fetch all the cards for a list.
+    get:
+      description: Operation to get a cards for a list
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+            example: 8   
+        - in: path
+          name: list_id
+          required: true
+          schema:
+            type: integer
+            example: 5
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                title: card details
+                type: array
+                items:
+                  properties:
+                      card_id:
+                        type: integer
+                        example: 15
+                      card_name:
+                        type: string
+                        example: card name
+                      content:
+                        type: string
+                        example: content for card
+                      status:
+                        type: string
+                        example: status of the card
+                      deadline:
+                        type: string
+                        example: yyyy-mm-dd   
+                      list_id:
+                        type: integer
+                        example: 5                      
+        '404':
+          description: User/lists not found.
+        '500':
+          description: Internal Server error.
+  
+    post:
+      description: Operation to add a card to a list
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+            example: 8   
+        - in: path
+          name: list_id
+          required: true
+          schema:
+            type: integer
+            example: 9
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                c_name:
+                  type: string
+                  example: card_name
+                cont:
+                  type: string
+                  example: content
+                comp:
+                  type: string
+                  example: comp
+                deadline:
+                  type: string
+                  example: yyyy-mm-dd                     
+      responses:
+        '201':
+          description: Successfully created a card.
+          content:
+            application/json:
+              schema:
+                title: user details
+                type: array
+                items:
+                  properties:
+                      c_id:
+                        type: integer
+                        example: 15
+                      c_name:
+                        type: string
+                        example: card name
+                      cont:
+                        type: string
+                        example: content
+                      comp:
+                        type: string
+                        example: comp
+                      deadline:
+                        type: string
+                        example: yyyy-mm-dd
+                      list_id:
+                        type: integer
+                        example: 8                        
+        '404':
+          description: User/list not found.
+        '500':
+          description: Internal Server Error.
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string                    
+                    
+  /api/user/{user_id}/list/{list_id}/card/{card_id}:
+    description: URL to delete a list for the user.
+    delete:
+      description: URL to delete a card for a list..
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+            example: 101
+        - in: path
+          name: list_id
+          required: true
+          schema:
+            type: integer
+            example: 10
+        - in: path
+          name: card_id
+          required: true
+          schema:
+            type: integer
+            example: 10           
+      responses:
+        '200':
+          description: Successfully deleted
+        '404':
+          description: Not found.
+        '500':
+          description: Internal Server Error         
+    put:
+      description: Operation to update the list
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+            example: 101
+        - in: path
+          name: list_id
+          required: true
+          schema:
+            type: integer
+            example: 10
+        - in: path
+          name: card_id
+          required: true
+          schema:
+            type: integer
+            example: 10       
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                c_name:
+                  type: string
+                  example: card name
+                cont:
+                  type: string
+                  example: content
+                comp:
+                  type: string
+                  example: comp    
+                deadline:
+                  type: string
+                  example: yyyy-mm-dd     
+                list_id:
+                  type: integer
+                  example: 3                            
+      responses:
+        '200':
+          description: Successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  card_id:
+                    type: integer
+                    example: 101
+                  card_name:
+                    type: string
+                    example: card name
+                  cont:
+                    type: string
+                    example: content
+                  comp:
+                    type: string
+                    example: comp
+                  deadline:
+                    type: string
+                    example: yyyy-mm-dd
+                  list_id:
+                    type: integer
+                    example: 8        
+        '404':
+          description: user/list/card not found
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request   
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string        
+                    
+  /api/user/{user_id}/summary:
+    description: >-
+      End point to fetch statistics for a user.
+    get:
+      description: Operation to get a user summary.
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+            example: 1         
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                title: user summary
+                type: array
+                items:
+                  properties:
+                      list_name:
+                        type: string
+                        example: list name
+                      total_cards:
+                        type: integer
+                        example: 5
+                      cards_that_crossed_deadline:
+                        type: integer
+                        example: 2    
+                      completed:
+                        type: integer
+                        example: 3
+                      successfully_submitted:
+                        type: integer
+                        example: 1 
+                      pending:
+                        type: integer
+                        example: 2
+                      failed_to_submit:
+                        type: integer
+                        example: 1                       
+                        
+        '404':
+          description: Invalid details.
+          
+        '500':
+          description: Internal Server Error. 
