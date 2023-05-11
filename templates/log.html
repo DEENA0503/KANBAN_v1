@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>
+    Kanban
+  </title>
+  <style>
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      background-color: rgba(211, 207, 207, 0.925);
+    }
+
+    .mb-2 {
+      text-align: center;
+      border-radius: 10px;
+      box-shadow: 0 0 25px -5px rgba(0, 0, 0, 0.6);
+      background: linear-gradient(whitesmoke, silver);
+      margin-left: 35%;
+      margin-right: 35%;
+      margin-top: 5%;
+    }
+
+    
+
+    .mb-3 {
+      padding: 50x 50px 50px 50px;
+      font-size: 13px;
+      font-weight: 60;
+      letter-spacing: 0.5px;
+      border-spacing: 15px
+    }
+
+    .app {
+      font-family: cursive;
+      font-size: xx-large;
+      font-weight: 700;
+      font-stretch: ultra-condensed;
+      color: rgb(9, 1, 14);
+
+
+    }
+
+    p {
+      color: #d10909;
+      border: #01010e;
+      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+      font-size: medium;
+    }
+
+    .btn1 {
+      color: #fff;
+      background-color: #050009;
+      font-size: 13px;
+      font-weight: 60;
+      letter-spacing: 0.5px;
+      width: 30%;
+      padding: 11px;
+      margin: 0 10px 10px 0;
+      border: 2px solid;
+      border-color: #01010e;
+      border-radius: 15px;
+      display: inline-block;
+    }
+
+    .btn2 {
+      color: rgb(9, 1, 14);
+      background-color: rgba(236, 239, 242, 0.089);
+      font-size: 14px;
+      font-weight: 150;
+      font-family: Arial;
+      text-decoration: solid;
+      letter-spacing: 1px;
+      width: 30%;
+      padding: 11px;
+      margin: 0 10px 10px 0;
+      border: 0px groove;
+      border-radius: 15px;
+      border-color: silver;
+
+    }
+
+    .form-control {
+      color: #01010e;
+      background: whitesmoke;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      height: 40px;
+      padding: 6px 6px;
+      border-radius: 5px;
+      border: 2px solid #F2F5F6;
+      box-shadow: none;
+      width: 65%;
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <div class="mb-2">
+    <form method="POST" action='#'>
+      <h1 class="app">Kanban</h1><br>
+      <div class="mb-3">
+        <label for="exampleInputName1" class="form-label"><input type="text" name="name" class="form-control"
+            id="exampleInputName1" required="True" maxlength="25" pattern="^[a-zA-Z1-9].*" title="Avoid spaces, tabs or any special characters at the start." placeholder="Name"></label>
+      </div><br><br>
+      <br>
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label"><input type="email" name="email" class="form-control"
+            id="exampleInputEmail1" aria-describedby="emailHelp" required="True" pattern="^[a-zA-Z1-9].*" title="Avoid spaces, tabs or any special characters at the start." maxlength="25" placeholder="email adress"></label>
+      </div><br><br>
+      <br>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label"><input type="password" name="passw" class="form-control"
+            id="exampleInputPassword1" required="True" pattern="[^\s]*" title="Avoid usage of space in the password of min length 6." minlength="6" maxlength="25" placeholder="Password"></label>
+      </div><br>
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      {% for message in messages %}
+      <p>{{message}}</p>
+      {% endfor %}
+      {% endif %}
+      {% endwith %}
+      <br><br><br>
+      <div class="mb-3">
+        <button href="/login" formaction="/login" type="submit" class="btn1">Login</button><br>
+        <button href="/signup" formaction="/signup" type="submit" class="btn2">Sign up</button>
+      </div><br><br>
+    </form>
+  </div>
+
+</body>

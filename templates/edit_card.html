@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}
+<title>edit card-KANBAN</title>
+{% endblock %}
+{% block css %}
+<style>
+  .mb-3 {
+    margin-left: 50px;
+    margin-right: 150px;
+    margin-top: 50px;
+  }
+</style>
+{% endblock %}
+{% block content %}
+<form method="POST" action="#">
+  <div class="mb-3">
+    <legend><strong>EDIT CARD</strong></legend><br><br>
+    <div class="dropdown">choose card :
+      <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+        style="background-color:silver; color:black;">
+        {{cr['c_name']}}
+      </button>
+      <ul class="dropdown-menu">
+        {% for c in car %}
+        {% if c!= cr %}
+        <li><a class="dropdown-item" href="/{{la['l_id']}}/{{c['c_id']}}/edit_card">{{c["c_name"]}}</a></li>
+        {% endif %}
+        {% endfor %}
+      </ul>
+    </div><br>
+
+
+    <label for="exampleInputEmail1" class="form-label">Title</label>
+    <input type="text" class="form-control" required="True" id="exampleInputEmail1" aria-describedby="emailHelp"
+      name="card_name" value="{{cr['c_name']}}" maxlength="20" pattern="^[a-zA-Z1-9].*"
+      title="Avoid spaces, tabs or any special characters at the start." style="width:auto;">
+
+  </div>
+  <div class="mb-3">
+    <label for="exampleFormControlTextarea1" class="form-label">Content</label>
+    <textarea class="form-control" maxlength="50" id="exampleFormControlTextarea1" name="cont" rows="3"
+      style="width:auto;">{{cr['cont']}}</textarea>
+  </div>
+  <div class="mb-3">
+    <label for="birthday">Deadline:</label>
+    <input type="date" id="birthday" name="deadline" required="True" value="{{cr['deadline']}}" style="width:auto;">
+  </div>
+  <div class="mb-3 form-check">
+    {% if cr.comp == "comp" %}
+    <input type="checkbox" class="form-check-input" id="exampleCheck1" name="done" value="comp" checked="True">
+    {% else %}
+    <input type="checkbox" class="form-check-input" id="exampleCheck1" name="done" value="comp">
+    {% endif %}
+    <label class="form-check-label" for="exampleCheck1">Mark as complete</label>
+  </div>
+  <div class="mb-3">
+    <button href="/user" type="submit" class="btn btn-dark">SAVE</button>
+  </div>
+</form>
+{% endblock %}

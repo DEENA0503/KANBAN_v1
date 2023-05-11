@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %}
+<title>summary-KANBAN</title>
+{% endblock %}
+{% block css %}
+<style>
+    .op {
+
+        border: solid;
+        border-color: gray;
+        border-style: solid;
+        border-width: 20px;
+    }
+
+    .gr {
+        display: flex;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        overflow: auto;
+        white-space: nowrap;
+        flex-shrink: none;
+
+    }
+
+    .oi {
+        display: inline-block;
+    }
+
+    .kl {
+        border: solid;
+        border-color: rgba(163, 144, 231, 0.646);
+        border-style: solid;
+        border-width: 3px;
+        margin-left: 20px;
+        margin-right: 50px;
+        margin-top: 20px;
+        border-radius: 10px;
+    }
+</style>
+{% endblock %}
+{% block content %}
+
+
+<div class="gr">
+    {% for i in k %}
+    <div class="oi">
+
+
+        <strong>STATISTICS</strong><br>
+        <div class="op">
+            <div class="kl">
+                <p style="text-decoration:underline; font-size:large; font-weight:500;padding-left:8px;">{{k[i][0]}}</p>
+                <p style="padding-left: 10px;">{{k[i][1]}}/{{k[i][5]}} tasks completed</p>
+                <p style="padding-left: 10px;">{{k[i][3]}}/{{k[i][5]}} succesfully submitted</p>
+                <p style="padding-left: 10px;">{{k[i][2]}}/{{k[i][5]}} pending tasks</p>
+                <p style="padding-left: 10px;">{{k[i][4]}}/{{k[i][5]}} tasks were failed to submit</p>
+                <p style="padding-left: 10px;">{{k[i][6]}}/{{k[i][5]}} tasks crossed the deadline out of which {{k[i][3]}} were completed on time</p>
+                
+            </div><br>
+            
+            <STRONG>GRAPH-</STRONG><br>
+            <img class="im" src="\static\{{i}}.png">
+        </div>
+    </div>
+    <br>
+    {% endfor %}
+
+</div>
+
+
+{% endblock %}

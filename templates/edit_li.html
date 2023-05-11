@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}
+<title>edit list-KANBAN</title>
+{% endblock %}
+{% block css %}
+<style>
+  .mb-3 {
+    margin-left: 50px;
+    margin-right: 150px;
+    margin-top: 50px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+{% for message in messages %}
+<p class="flash" style="font-size:large;">{{message}}</p>
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+<form method="POST" , action="#">
+  <div class="mb-3">
+    <h1>Edit List</h1><br>
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" name="l_id" value="{{l.l_id}}" type="button"
+        data-bs-toggle="dropdown" aria-expanded="false">
+        {{l['l_name']}}
+      </button>
+      <ul class="dropdown-menu">
+        {% for la in ls %}
+        {% if la!=l.l_name %}
+        <li><a name="l_id" value="{{la.l_id}}" class="dropdown-item"
+            href="/{{user_id}}/{{la['l_id']}}/edit_li">{{la["l_name"]}}</a></li>
+        {% endif %}
+        {% endfor %}
+      </ul>
+    </div><br>
+    <label for="exampleFormControlInput1" class="form-label" style="font-weight:500;">List name</label>
+    <input type="text" class="form-control" maxlength="20" id="exampleFormControlInput1" name="l_name" value="{{l['l_name']}}"
+      required="True" placeholder="List name" pattern="^[a-zA-Z1-9].*"
+      title="Avoid spaces, tabs or any special characters at the start." style="width:auto;">
+    <br>
+  </div>
+  <div class="mb-3">
+    <label for="exampleFormControlTextarea1" class="form-label" style="font-weight:500;">Discription</label>
+    <textarea class="form-control" maxlength="45" id="exampleFormControlTextarea1" name="dsp" rows="3"
+      style="width:auto">{{l['dsp']}}</textarea>
+
+  </div>
+  <div class="mb-3">
+    <button href="/user" type="submit" class="btn btn-dark">SAVE</button>
+
+
+  </div>
+</form>
+{% endblock %}

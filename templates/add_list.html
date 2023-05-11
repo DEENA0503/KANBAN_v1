@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}
+<title>add list-KANBAN</title>
+{% endblock %}
+
+{% block css %}
+<style>
+  .mb-3 {
+    margin-left: 50px;
+    margin-right: 150px;
+    margin-top: 50px;
+  }
+</style>
+{% endblock %}
+{% block content %}
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+{% for message in messages %}
+<p class="flash" style="font-size:large;">{{message}}</p>
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+<form method="POST" , action="#">
+  <div class="mb-3">
+    <h1><strong>Add List</strong></h1><br>
+
+    <label for="exampleFormControlInput1" class="form-label" style="font-weight:500">List name</label>
+    <input type="text" class="form-control" id="exampleFormControlInput1" name="l_name" required="True"
+      pattern="^[a-zA-Z1-9].*" maxlength="20" title="Avoid spaces, tabs or any special characters at the start."
+      placeholder="List name" style="width:auto;">
+    <br>
+  </div>
+
+  <div class="mb-3">
+    <label for="exampleFormControlTextarea1" class="form-label" style="font-weight:500;">Discription</label>
+    <textarea class="form-control" id="exampleFormControlTextarea1" maxlength="45" name="dsp" rows="3" style="width:auto;"></textarea>
+  </div>
+
+  <div class="mb-3">
+    <button href="/user" type="submit" class="btn btn-dark">ADD</button>
+
+
+  </div>
+</form>
+{% endblock %}

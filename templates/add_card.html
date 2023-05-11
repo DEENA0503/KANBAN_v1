@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}
+<title>add card-KANBAN</title>
+{% endblock %}
+{% block css %}
+<style>
+  .mb-3 {
+    margin-left: 50px;
+    margin-right: 150px;
+    margin-top: 50px;
+  }
+</style>
+{% endblock %}
+{% block content %}
+<form method="POST" action="#">
+  <div class="mb-3">
+    <h3><strong>ADD CARD</strong></h3><br>
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        {{l_name}}
+      </button>
+      <ul class="dropdown-menu">
+        {% for l in ls %}
+        <li><a class="dropdown-item" href="/{{user_id}}/{{l['l_id']}}/add_card">{{l["l_name"]}}</a></li>
+        {% endfor %}
+      </ul>
+    </div><br>
+
+    <label for="exampleInputEmail1" class="form-label">Title</label>
+    <input type="text" required="True" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+      name="card_name" pattern="^[a-zA-Z1-9].*" title="Avoid spaces, tabs or any special characters at the start."
+      maxlength="20" style="width:auto;">
+
+  </div>
+  <div class="mb-3">
+    <label for="exampleFormControlTextarea1" class="form-label">Content</label>
+    <textarea class="form-control" maxlength="50" id="exampleFormControlTextarea1" name="cont" rows="3" style="width:auto;"></textarea>
+  </div>
+  <div class="mb-3">
+    <label for="birthday">Deadline:</label>
+    <input type="date" min="{{td}}" id="birthday" name="deadline" required="True" style="width:auto;">
+  </div>
+  <div class="mb-3 form-check">
+
+    <input type="checkbox" class="form-check-input" id="exampleCheck1" name="done" value="comp">
+    <label class="form-check-label" for="exampleCheck1">Mark as complete</label><br><br>
+
+    <button href="/user" type="submit" class="btn btn-primary" style="background-color:black;">ADD</button>
+  </div>
+</form>
+{% endblock %}

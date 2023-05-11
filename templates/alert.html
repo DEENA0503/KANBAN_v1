@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}
+<title>conformation-KANBAN</title>
+{% endblock %}
+{% block css %}
+<style>
+    .mb-3 {
+        margin: auto;
+        margin-left: 100px;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="mb-3">
+    <h5><strong style="color: rgba(224, 4, 89, 0.952);text-decoration:underline;">Are you sure you want to delete the
+            list "{{ln['l_name']}}" or move its cards to a differrent list and then delete it?</strong></h5><br>
+    <form method="POST" action="/user/{{ln['l_id']}}/del_li">
+        <button href="/user/{{ln['l_id']}}/del_li" name="l_id" value="{{ln['l_id']}}" type="submit"
+            style="background-color:rgb(0, 0, 0);color:white;">YES</button>
+
+    </form>
+    <br>
+
+    <form method="GET" action="/user">
+        <button href="/user" style="background-color:rgb(6, 0, 0);color: white;">NO</button>
+    </form>
+
+
+    <br>
+    {% if card!= 0 %}
+    <div class="dropdown">
+        <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle text-wrap"
+            data-bs-toggle="dropdown" style="background-color: black;color: white;">move cards to
+        </button>
+        <ul class="dropdown-menu dropdown-menu-dark">
+            {% for lis in ls %}
+            {% if lis.l_id != ln.l_id %}
+            <li>
+                <form method="POST" action="/user/{{ln['l_id']}}/move_cards">
+                    <button type="submit" class="dropdown-item" name="l_id" value="{{lis['l_id']}}"
+                        href="/user/{{ln['l_id']}}/move_cards">{{lis['l_name']}}
+                    </button>
+                </form>
+            </li>
+
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+        </ul>
+    </div>
+
+</div>
+<!--  -->
+
+{% endblock %}

@@ -1,0 +1,477 @@
+{% extends 'base.html' %}
+{% block css %}
+<style>
+  .lis {
+    display: flex;
+    flex-direction: row;
+    /*justify-content: space-between;*/
+    overflow: auto;
+    white-space: nowrap;
+    flex-shrink: none;
+    /*flex-flow: row nowrap;*/
+    /*flex-flow: row wrap-reverse;*/
+
+
+
+  }
+
+  .list-group {
+    margin-top: 30px;
+    text-align: center;
+    padding-top: 100px;
+    padding-bottom: 100px;
+    margin-left: 30px;
+    margin-right: 30px;
+    align-items: center;
+
+
+
+  }
+
+  /*.list-group-item-action{ /*for cards internal text
+        column-width: 3.5cm;
+    }
+    .list-group-item{
+        color: blueviolet;
+    }*/
+  .card {
+    /*width:100%;*/
+    text-align: center;
+    text-rendering: geometricPrecision;
+    width: 320px;
+  }
+
+  .dropdown-toggle {
+    width: 320px;
+
+  }
+
+  .a {
+    width: 320px;
+  }
+
+  .dsp {
+    display: none;
+    font-size: small;
+    font-weight: 400;
+    background-color: indianred;
+    color: whitesmoke;
+    width: 320px;
+  }
+
+  button:hover+div {
+    display: block;
+  }
+
+ 
+  ul li:hover ul {
+    display: block;
+  }
+
+  ul li ul {
+    display: none;
+  }
+
+  ul li ul li {
+    background: #555;
+    display: block;
+  }
+
+  ul li ul li a {
+    display: block !important;
+  }
+
+  
+  [aria-disabled="true"] {
+    opacity: 0.6;
+  }
+
+  */
+</style>
+{% endblock %}
+
+
+{% block content %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+{% for message in messages %}
+<p class="flash">{{message}}</p>
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+<body>
+  <div class="lis">
+    {% for l in ls %}
+
+    <div class="list-group">
+      <div class="dropup-center dropup text-wrap">
+        <button class="btn btn-secondary dropdown-toggle text-wrap" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+          style="font-weight:750 ;">
+          {{ l["l_name"] }}
+
+        </button>
+        <div class="dsp text-wrap">{{l["dsp"]}}</div>
+
+        <ul class="dropdown-menu dropdown-menu-dark">
+          <li><a class="dropdown-item" href="{{user_id}}/{{l['l_id']}}/add_card">Add card</a></li>
+          <li><a class="dropdown-item" href="/user/{{l['l_id']}}/del_lis">Delete list</a></li>
+          <li><a class="dropdown-item" href="{{user_id}}/{{l['l_id']}}/edit_li">Edit list</a></li>
+
+        </ul>
+      </div>
+
+      {% for cr in cards[l] %}
+
+      {% if cr.comp == "comp" and td > cr.deadline %}
+
+      <div class="card text-center">
+        <div class="btn-group dropend">
+          <button type="button" class="btn btn-secondary text-wrap"
+            style="background-color: darkgrey;width: 270px;color:black;font-weight:700;font-size: large;" disabled>
+            {{ cr["c_name"] }}
+          </button>
+          <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split"
+            data-bs-toggle="dropdown" aria-expanded="false"
+            style="background-color: darkgrey;width: 50px;color: black;">
+            <span class="visually-hidden">Toggle Dropend</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-dark">
+            
+            <li><a class="dropdown-item disabled" href="{{l['l_id']}}/{{cr['c_id']}}/edit_card">edit card</a></li>
+            <li><a class="dropdown-item" href="/user/{{l['l_id']}}/{{cr['c_id']}}/del_cr">delete card</a></li>
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="#">move to</a>
+              <ul>
+                {% for lis in ls %}
+                <li>
+                  {% if lis.l_id != l.l_id %}
+                  <form method="POST" action="/user/{{lis['l_id']}}/{{cr['c_id']}}/move_card">
+                    <button href="/user/{{lis['l_id']}}/{{cr['c_id']}}/move_card" type="submit" name="l_id"
+                      value="{{lis['l_id']}}" style="background-color:#666;color: rgba(243, 156, 179, 0.906);">
+                      {{lis['l_name']}}
+                    </button>
+                  </form>
+                  {% endif %}
+                </li>
+                {% endfor %}
+              </ul>
+            </li>
+           
+
+          </ul>
+        </div>
+
+        <div class="card-body" aria-disabled="true">
+
+          <p class="card-text text-wrap">{{cr["cont"]}}</p>
+
+
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-check-square-fill" viewBox="0 0 16 16" style="color:rgba(29, 160, 59, 0.735);">
+            <path
+              d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z" />
+          </svg>
+
+          <strong style="color:rgba(29, 160, 59, 0.735)" class="text-wrap">SUCCESSFULLY SUBMITTED</strong>
+          <div>completed on {% set list12 = cr.d.split('-') %}
+            {%- for items in list12|reverse -%}
+            <span>{% if not loop.last %}{{items}} -{% else %}{{items}}{% endif %}</span>
+            {% endfor %}</div>
+
+        </div>
+        <div class="card-footer text-muted" aria-disabled="true">
+          DEADLINE : {% set list1 = cr.deadline.split('-') %}
+          {%- for item in list1|reverse -%}
+          <span>{% if not loop.last %}{{item}} -{% else %}{{item}}{% endif %}</span>
+          {% endfor %}
+        </div>
+
+      </div>
+      {% elif cr.comp != "comp" and cr.deadline > td %}
+      <div class="card text-center">
+        <div class="btn-group dropend">
+          <button type="button" class="btn btn-secondary text-wrap"
+            style="background-color: darkgrey;width: 270px;color:black;font-weight:700;font-size: large;">
+            {{ cr["c_name"] }}
+          </button>
+          <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split"
+            data-bs-toggle="dropdown" aria-expanded="false"
+            style="background-color: darkgrey;width: 50px;color: black;">
+            <span class="visually-hidden">Toggle Dropend</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-dark">
+            
+            <li><a class="dropdown-item" href="{{l['l_id']}}/{{cr['c_id']}}/edit_card">edit card</a></li>
+            <li><a class="dropdown-item" href="/user/{{l['l_id']}}/{{cr['c_id']}}/del_cr">delete card</a></li>
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="#">move to</a>
+              <ul>
+                {% for lis in ls %}
+                <li>
+                  {% if lis.l_id != l.l_id %}
+                  <form method="POST" action="/user/{{lis['l_id']}}/{{cr['c_id']}}/move_card">
+                    <button href="/user/{{lis['l_id']}}/{{cr['c_id']}}/move_card" type="submit" name="l_id"
+                      value="{{lis['l_id']}}" style="background-color:#666;color: rgba(243, 156, 179, 0.906);">
+                      {{lis['l_name']}}
+                    </button>
+                  </form>
+                  {% endif %}
+                </li>
+                {% endfor %}
+              </ul>
+            </li>
+            
+
+          </ul>
+        </div>
+
+        <div class="card-body">
+
+          <p class="card-text text-wrap">{{cr["cont"]}}</p>
+
+
+          <div class="align-items-center">
+
+            <div class="spinner-border text-danger ms-auto spinner-border-sm" role="status" aria-hidden="true"></div>
+            <strong style="color:rgba(193, 34, 87, 0.986) ;">PENDING</strong>
+            
+
+          </div>
+
+        </div>
+        <div class="card-footer text-muted">
+
+          DEADLINE : {% set list1 = cr.deadline.split('-') %}
+          {%- for item in list1|reverse -%}
+          <span>{% if not loop.last %}{{item}} -{% else %}{{item}}{% endif %}</span>
+          {% endfor %}
+        </div>
+
+      </div>
+      {% elif cr.comp == "comp" and cr.deadline >= td %}
+
+
+
+      <div class="card text-center">
+        <div class="btn-group dropend">
+          <button type="button" class="btn btn-secondary text-wrap"
+            style="background-color: darkgrey;width: 270px;color:black;font-weight:700;font-size: large;">
+            {{ cr["c_name"] }}
+          </button>
+          <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split"
+            data-bs-toggle="dropdown" aria-expanded="false"
+            style="background-color: darkgrey;width: 50px;color: black;">
+            <span class="visually-hidden">Toggle Dropend</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-dark">
+            
+            <li><a class="dropdown-item" href="{{l['l_id']}}/{{cr['c_id']}}/edit_card">edit card</a></li>
+            <li><a class="dropdown-item" href="/user/{{l['l_id']}}/{{cr['c_id']}}/del_cr">delete card</a></li>
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="#">move to</a>
+              <ul>
+                {% for lis in ls %}
+                <li>
+                  {% if lis.l_id != l.l_id %}
+                  <form method="POST" action="/user/{{lis['l_id']}}/{{cr['c_id']}}/move_card">
+                    <button href="/user/{{lis['l_id']}}/{{cr['c_id']}}/move_card" type="submit" name="l_id"
+                      value="{{lis['l_id']}}" style="background-color:#666;color: rgba(243, 156, 179, 0.906);">
+                      {{lis['l_name']}}
+                    </button>
+                  </form>
+                  {% endif %}
+                </li>
+                {% endfor %}
+              </ul>
+            </li>
+           
+
+          </ul>
+        </div>
+
+        <div class="card-body">
+
+          <p class="card-text text-wrap">{{cr["cont"]}}</p>
+
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill"
+            viewBox="0 0 16 16" style="color:rgba(29, 160, 59, 0.735);">
+            <path
+              d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+          </svg>
+
+          <strong style="color:rgba(29, 160, 59, 0.735)">COMPLETED</strong>
+          <div style="color: rgb(124, 216, 124);text-decoration:underline;">on {% set list12 = cr.d.split('-') %}
+            {%- for items in list12|reverse -%}
+            <span>{% if not loop.last %}{{items}} -{% else %}{{items}}{% endif %}</span>
+            {% endfor %}</div>
+
+        </div>
+        <div class="card-footer text-muted">
+          DEADLINE : {% set list1 = cr.deadline.split('-') %}
+          {%- for item in list1|reverse -%}
+          <span>{% if not loop.last %}{{item}} -{% else %}{{item}}{% endif %}</span>
+          {% endfor %}
+        </div>
+
+      </div>
+
+      {% elif cr.comp != "comp" and td > cr.deadline %}
+      <div class="card text-center">
+        <div class="btn-group dropend">
+          <button type="button" class="btn btn-secondary text-wrap"
+            style="background-color: darkgrey;width: 270px;color:black;font-weight:700;font-size: large;" disabled>
+            {{ cr["c_name"] }}
+          </button>
+          <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split"
+            data-bs-toggle="dropdown" aria-expanded="false"
+            style="background-color: darkgrey;width: 50px;color: black;">
+            <span class="visually-hidden">Toggle Dropend</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-dark">
+            
+            <li><a class="dropdown-item disabled" href="{{l['l_id']}}/{{cr['c_id']}}/edit_card">edit card</a></li>
+            <li><a class="dropdown-item" href="/user/{{l['l_id']}}/{{cr['c_id']}}/del_cr">delete card</a></li>
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="#">move to</a>
+              <ul>
+                {% for lis in ls %}
+                <li>
+                  {% if lis.l_id != l.l_id %}
+                  <form method="POST" action="/user/{{lis['l_id']}}/{{cr['c_id']}}/move_card">
+                    <button href="/user/{{lis['l_id']}}/{{cr['c_id']}}/move_card" type="submit" name="l_id"
+                      value="{{lis['l_id']}}" style="background-color:#666;color: rgba(243, 156, 179, 0.906);">
+                      {{lis['l_name']}}
+                    </button>
+                  </form>
+                  {% endif %}
+                </li>
+                {% endfor %}
+              </ul>
+            </li>
+           
+
+          </ul>
+        </div>
+
+        <div class="card-body" aria-disabled="true">
+
+          <p class="card-text text-wrap">{{cr["cont"]}}</p>
+          <div class="align-items-center">
+
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+              class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16" style="color:rgba(193, 34, 87, 0.986);">
+              <path
+                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
+            </svg>
+            <strong style="color:rgba(193, 34, 87, 0.986) ;" class="text-wrap">FAILED TO SUBMIT</strong>
+          </div>
+
+        </div>
+        <div class="card-footer text-muted" aria-disabled="true">
+          DEADLINE : {% set list1 = cr.deadline.split('-') %}
+          {%- for item in list1|reverse -%}
+          <span>{% if not loop.last %}{{item}} -{% else %}{{item}}{% endif %}</span>
+          {% endfor %}
+        </div>
+
+      </div>
+      {% elif cr.comp != "comp" and cr.deadline == td %}
+      <div class="card text-center">
+        <div class="btn-group dropend">
+          <button type="button" class="btn btn-secondary"
+            style="background-color: darkgrey;width: 270px;color:black;font-weight:700;font-size: large;">
+            {{ cr["c_name"] }}
+          </button>
+          <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split"
+            data-bs-toggle="dropdown" aria-expanded="false"
+            style="background-color: darkgrey;width: 50px;color: black;">
+            <span class="visually-hidden">Toggle Dropend</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-dark">
+            
+            <li><a class="dropdown-item" href="{{l['l_id']}}/{{cr['c_id']}}/edit_card">edit card</a></li>
+            <li><a class="dropdown-item" href="/user/{{l['l_id']}}/{{cr['c_id']}}/del_cr">delete card</a></li>
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="#">move to</a>
+              <ul>
+                {% for lis in ls %}
+                <li>
+                  {% if lis.l_id != l.l_id %}
+                  <form method="POST" action="/user/{{lis['l_id']}}/{{cr['c_id']}}/move_card">
+                    <button href="/user/{{lis['l_id']}}/{{cr['c_id']}}/move_card" type="submit" name="l_id"
+                      value="{{lis['l_id']}}" style="background-color:#666;color: rgba(243, 156, 179, 0.906);">
+                      {{lis['l_name']}}
+                    </button>
+                  </form>
+                  {% endif %}
+                </li>
+                {% endfor %}
+              </ul>
+            </li>
+            
+
+          </ul>
+        </div>
+
+        <div class="card-body">
+
+          <p class="card-text text-wrap">{{cr["cont"]}}</p>
+
+
+          <div class="align-items-center">
+
+            <div class="spinner-grow text-primary spinner-grow-sm" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <strong  class="text-wrap" style="color:rgba(73, 57, 223, 0.986) ;">THE DEADLINE IS TODAY</strong>
+          </div>
+
+        </div>
+        <div class="card-footer text-muted">
+          DEADLINE : {% set list1 = cr.deadline.split('-') %}
+          {%- for item in list1|reverse -%}
+          <span>{% if not loop.last %}{{item}} -{% else %}{{item}}{% endif %}</span>
+          {% endfor %}
+        </div>
+
+      </div>
+
+
+      {% endif %}
+
+
+
+
+      {% endfor %}
+
+
+      <a role="button" href="{{user_id}}/{{l['l_id']}}/add_card" class="btn btn-outline-danger a">ADD CARD +</a>
+
+
+
+
+    </div>
+
+    {% endfor %}
+
+
+  </div>
+
+</body>
+{% endblock %}
